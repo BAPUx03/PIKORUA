@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PIKORUA | Secure Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #4ade80;
+            --error: #f87171;
+            --gold: linear-gradient(45deg, #ffd700, #ffaa00, #ffd700);
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            --gradient-primary: linear-gradient(135deg, #4361ee, #3a0ca3);
+            --gradient-accent: linear-gradient(45deg, #4cc9f0, #4895ef);
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            color: var(--light);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Login Page Styles */
+        #login-page {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            animation: fadeIn 0.8s ease;
+        }
+
+        .login-logo {
+            margin-bottom: 2rem;
+            text-align: center;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .login-logo h1 {
+            font-size: 4rem;
+            font-weight: 900;
+            font-family: 'Montserrat', sans-serif;
+            background: var(--gold);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: 2px;
+            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+            animation: shine 3s linear infinite;
+        }
+
+        .login-logo h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 5px;
+            background: var(--gold);
+            border-radius: 2px;
+            animation: expand 1.2s ease;
+        }
+
+        .login-logo p {
+            font-size: 1.1rem;
+            color: #94a3b8;
+            margin-top: 1.5rem;
+            animation: fadeIn 1.5s ease;
+        }
+
+        .login-card {
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: slideUp 0.8s ease-out;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 215, 0, 0.1), transparent);
+            transform: rotate(30deg);
+            transition: var(--transition);
+            z-index: -1;
+        }
+
+        .login-card:hover::before {
+            transform: rotate(30deg) translate(20%, 20%);
+        }
+
+        .login-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(255, 215, 0, 0.2);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            animation: fadeIn 1.2s ease;
+        }
+
+        .login-header h2 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: var(--gold);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-family: 'Montserrat', sans-serif;
+            animation: shine 3s linear infinite;
+        }
+
+        .login-header p {
+            color: #94a3b8;
+            font-size: 1.1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            animation: slideRight 0.8s ease-out;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #ffd700;
+        }
+
+        .input-with-icon {
+            position: relative;
+        }
+
+        .input-with-icon i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #64748b;
+            transition: var(--transition);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 14px 14px 14px 45px;
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid #334155;
+            border-radius: 10px;
+            color: var(--light);
+            font-size: 1rem;
+            transition: var(--transition);
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #ffd700;
+            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2);
+            background: rgba(15, 23, 42, 0.9);
+        }
+
+        .form-control:focus + i {
+            color: #ffd700;
+            transform: translateY(-50%) scale(1.2);
+        }
+
+        .login-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            animation: fadeIn 1s ease;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--gold);
+            border: none;
+            border-radius: 10px;
+            color: #1e293b;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 0.5rem;
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 215, 0, 0.6);
+        }
+
+        .login-btn:active {
+            transform: translateY(1px);
+        }
+
+        .login-btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: rotate(30deg);
+            transition: var(--transition);
+        }
+
+        .login-btn:hover::after {
+            transform: rotate(30deg) translate(20%, 20%);
+        }
+
+        .login-btn .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(30, 41, 59, 0.3);
+            border-radius: 50%;
+            border-top-color: #1e293b;
+            animation: spin 1s linear infinite;
+        }
+
+        .error-message {
+            background-color: rgba(248, 113, 113, 0.15);
+            border: 1px solid var(--error);
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 1.5rem;
+            text-align: center;
+            color: var(--error);
+            font-weight: 500;
+            display: none;
+            animation: shake 0.5s ease;
+            transition: var(--transition);
+        }
+
+        .error-message.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        /* Loading bar */
+        .loading-container {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-top: 1.5rem;
+            display: none;
+        }
+
+        .loading-bar {
+            height: 100%;
+            width: 0%;
+            background: var(--gold);
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Home Page Styles */
+        #home-page {
+            width: 100%;
+            display: none;
+            flex-direction: column;
+            animation: fadeIn 0.8s ease;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Header Styles */
+        .header {
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            animation: slideDown 0.5s ease;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            animation: fadeInLeft 0.8s ease;
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            font-family: 'Montserrat', sans-serif;
+            background: var(--gold);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: 1px;
+            animation: shine 3s linear infinite;
+        }
+
+        .logo span {
+            color: #ffd700;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 2rem;
+            animation: fadeIn 1s ease;
+        }
+
+        .nav-menu a {
+            text-decoration: none;
+            color: #cbd5e1;
+            font-weight: 500;
+            font-size: 1.1rem;
+            padding: 0.5rem 0;
+            position: relative;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-menu a:hover {
+            color: #ffd700;
+            transform: translateY(-2px);
+        }
+
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #ffd700;
+            transition: var(--transition);
+        }
+
+        .nav-menu a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 5rem 2rem;
+            text-align: center;
+            background: linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.9)), url('https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=1950') no-repeat center/cover;
+            border-radius: 0 0 20px 20px;
+            margin: 0 2rem;
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 1.2s ease;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, transparent 20%, rgba(15, 23, 42, 0.9) 80%);
+            animation: pulseHero 8s infinite alternate;
+        }
+
+        .hero h2 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            font-family: 'Montserrat', sans-serif;
+            margin-bottom: 1rem;
+            background: var(--gold);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+            z-index: 2;
+            animation: fadeInUp 1s ease, shine 3s linear infinite;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            color: #cbd5e1;
+            position: relative;
+            z-index: 2;
+            animation: fadeInUp 1.2s ease;
+        }
+
+        /* Boxes Section */
+        .section-title {
+            text-align: center;
+            margin: 4rem 0 2rem;
+            position: relative;
+            animation: fadeIn 1s ease;
+        }
+
+        .section-title h3 {
+            font-size: 2.5rem;
+            font-family: 'Montserrat', sans-serif;
+            display: inline-block;
+            background: var(--gold);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+            animation: shine 3s linear infinite;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: var(--gold);
+            margin: 10px auto;
+            border-radius: 2px;
+            animation: expand 1s ease;
+        }
+
+        .boxes-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 0 2rem 4rem;
+        }
+
+        .box {
+            background: rgba(30, 41, 59, 0.7);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            transition: var(--transition);
+            transform: translateY(0);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            animation: fadeInUp 0.6s ease-out;
+            position: relative;
+            opacity: 0;
+        }
+
+        .box.animate {
+            animation: boxEntrance 0.8s ease-out forwards;
+        }
+
+        .box:hover {
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3), 0 0 30px rgba(255, 215, 0, 0.4);
+            border-color: rgba(255, 215, 0, 0.5);
+        }
+
+        .box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(255, 215, 0, 0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: var(--transition);
+            pointer-events: none;
+        }
+
+        .box:hover::before {
+            opacity: 1;
+        }
+
+        .box-img {
+            height: 200px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .box-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .box:hover .box-img img {
+            transform: scale(1.1);
+        }
+
+        .box-content {
+            padding: 1.5rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .box-content h4 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: #ffd700;
+            transition: var(--transition);
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .box:hover .box-content h4 {
+            color: white;
+        }
+
+        .box-content p {
+            color: #94a3b8;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+            transition: var(--transition);
+        }
+
+        .box:hover .box-content p {
+            color: #e2e8f0;
+        }
+
+        .box-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 215, 0, 0.1);
+            color: #ffd700;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .box-btn:hover {
+            background: rgba(255, 215, 0, 0.2);
+            transform: translateX(5px);
+            color: white;
+        }
+
+        .box-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: translateX(-100%);
+            transition: var(--transition);
+        }
+
+        .box-btn:hover::after {
+            transform: translateX(100%);
+        }
+
+        /* Footer */
+        .footer {
+            background: rgba(15, 23, 42, 0.9);
+            padding: 2rem;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .footer p {
+            color: #94a3b8;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideDown {
+            from { 
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideRight {
+            from { 
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeInLeft {
+            from { 
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeInRight {
+            from { 
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from { 
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 107, 107, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 107, 107, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 107, 107, 0); }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @keyframes pulseHero {
+            0% { transform: scale(1); opacity: 0.3; }
+            100% { transform: scale(1.1); opacity: 0.5; }
+        }
+
+        @keyframes expand {
+            from { width: 0; opacity: 0; }
+            to { width: 80px; opacity: 1; }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes shine {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes boxEntrance {
+            0% { 
+                opacity: 0;
+                transform: translateY(30px) rotateX(90deg);
+            }
+            100% { 
+                opacity: 1;
+                transform: translateY(0) rotateX(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .boxes-container {
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            }
+        }
+
+        @media (max-width: 992px) {
+            .hero h2 {
+                font-size: 3rem;
+            }
+            
+            .section-title h3 {
+                font-size: 2.2rem;
+            }
+            
+            .nav-menu {
+                gap: 1.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .login-card {
+                padding: 1.8rem;
+            }
+            
+            .hero {
+                padding: 4rem 1.5rem;
+            }
+            
+            .hero h2 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .header {
+                flex-direction: column;
+                padding: 1.2rem;
+                gap: 1rem;
+            }
+            
+            .nav-menu {
+                margin: 1rem 0;
+                gap: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .section-title h3 {
+                font-size: 2rem;
+            }
+            
+            .boxes-container {
+                padding: 0 1.5rem 3rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .login-logo h1 {
+                font-size: 3rem;
+            }
+            
+            .login-header h2 {
+                font-size: 1.8rem;
+            }
+            
+            .hero {
+                padding: 3rem 1rem;
+                margin: 0 1rem;
+            }
+            
+            .hero h2 {
+                font-size: 2.2rem;
+            }
+            
+            .section-title h3 {
+                font-size: 1.8rem;
+            }
+            
+            .box {
+                max-width: 350px;
+                margin: 0 auto;
+            }
+            
+            .footer {
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .login-card {
+                padding: 1.5rem;
+            }
+            
+            .login-logo h1 {
+                font-size: 2.5rem;
+            }
+            
+            .nav-menu {
+                gap: 0.8rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Page -->
+    <div id="login-page">
+        <div class="container">
+            <div class="login-logo">
+                <h1>PIKORUA</h1>
+                <p>Secure Access Portal</p>
+            </div>
+            
+            <div class="login-card">
+                <div class="login-header">
+                    <h2>Welcome Back</h2>
+                    <p>Please login to access your dashboard</p>
+                </div>
+                
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="user-id">Pikorua ID</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="user-id" class="form-control" placeholder="Enter your Pikorua ID" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="password" class="form-control" placeholder="Enter your password" required>
+                        </div>
+                    </div>
+                    
+                    <div class="login-options">
+                        <div class="remember-me">
+                            <input type="checkbox" id="remember">
+                            <label for="remember">Remember me</label>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="login-btn" id="login-btn">
+                        <span>Login to Dashboard</span>
+                        <div class="spinner" id="login-spinner"></div>
+                    </button>
+                </form>
+                
+                <div id="error-message" class="error-message">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span>Invalid credentials. Please try again.</span>
+                </div>
+                
+                <div class="loading-container" id="loading-container">
+                    <div class="loading-bar" id="loading-bar"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Home Page (Hidden by default) -->
+    <div id="home-page">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <h1>PIKO<span>RUA</span></h1>
+            </div>
+            
+            <nav class="nav-menu">
+                <a href="#" class="nav-link active"><i class="fas fa-home"></i> Home</a>
+                <a href="#" class="nav-link"><i class="fas fa-chart-line"></i> Analytics</a>
+                <a href="#" class="nav-link"><i class="fas fa-box"></i> Products</a>
+                <a href="#" class="nav-link"><i class="fas fa-users"></i> Team</a>
+                <a href="#" class="nav-link"><i class="fas fa-cog"></i> Settings</a>
+            </nav>
+        </header>
+        
+        <!-- Hero Section -->
+        <section class="hero">
+            <h2>Welcome to PIKORUA Dashboard</h2>
+            <p>Manage your resources, monitor activities, and analyze performance with our powerful tools</p>
+        </section>
+        
+        <!-- Boxes Section -->
+        <div class="section-title">
+            <h3>Featured Services</h3>
+        </div>
+        
+        <div class="boxes-container">
+            <!-- Box 1 -->
+            <div class="box">
+                <div class="box-img">
+                    <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&w=600&h=400" alt="Analytics">
+                </div>
+                <div class="box-content">
+                    <h4>Advanced Analytics</h4>
+                    <p>Get insights into your business performance with real-time analytics and detailed reports.</p>
+                    <a href="#" class="box-btn">View Details <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+            
+            <!-- Box 2 -->
+            <div class="box">
+                <div class="box-img">
+                    <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=600&h=400" alt="Security">
+                </div>
+                <div class="box-content">
+                    <h4>Security Suite</h4>
+                    <p>Protect your data with our enterprise-grade security solutions and monitoring tools.</p>
+                    <a href="#" class="box-btn">View Details <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+            
+            <!-- Box 3 -->
+            <div class="box">
+                <div class="box-img">
+                    <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=600&h=400" alt="Cloud">
+                </div>
+                <div class="box-content">
+                    <h4>Cloud Storage</h4>
+                    <p>Access your files anywhere with our secure and scalable cloud storage solution.</p>
+                    <a href="#" class="box-btn">View Details <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+            
+            <!-- Box 4 -->
+            <div class="box">
+                <div class="box-img">
+                    <img src="https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&w=600&h=400" alt="Automation">
+                </div>
+                <div class="box-content">
+                    <h4>Process Automation</h4>
+                    <p>Streamline your workflows and reduce manual tasks with our automation tools.</p>
+                    <a href="#" class="box-btn">View Details <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+            
+            <!-- Box 5 -->
+            <div class="box">
+                <div class="box-img">
+                    <img src="https://images.unsplash.com/photo-1522542550221-31fd19575a2d?auto=format&fit=crop&w=600&h=400" alt="Collaboration">
+                </div>
+                <div class="box-content">
+                    <h4>Team Collaboration</h4>
+                    <p>Enhance teamwork with our integrated collaboration platform and communication tools.</p>
+                    <a href="#" class="box-btn">View Details <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+            
+            <!-- Box 6 -->
+            <div class="box">
+                <div class="box-img">
+                    <img src="https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&w=600&h=400" alt="AI">
+                </div>
+                <div class="box-content">
+                    <h4>AI Solutions</h4>
+                    <p>Leverage artificial intelligence to gain competitive advantages and automate decisions.</p>
+                    <a href="#" class="box-btn">View Details <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <footer class="footer">
+            <p>© 2023 PIKORUA. All rights reserved.</p>
+        </footer>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const loginForm = document.getElementById('login-form');
+            const loginBtn = document.getElementById('login-btn');
+            const loginSpinner = document.getElementById('login-spinner');
+            const errorMessage = document.getElementById('error-message');
+            const loadingContainer = document.getElementById('loading-container');
+            const loadingBar = document.getElementById('loading-bar');
+            const loginPage = document.getElementById('login-page');
+            const homePage = document.getElementById('home-page');
+            const navLinks = document.querySelectorAll('.nav-link');
+            const boxBtns = document.querySelectorAll('.box-btn');
+            const boxes = document.querySelectorAll('.box');
+            
+            // Valid credentials
+            const validId = "PRUTHVI";
+            const validPassword = "PIKORUA123";
+            
+            // Login functionality
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const userId = document.getElementById('user-id').value;
+                const password = document.getElementById('password').value;
+                const rememberMe = document.getElementById('remember').checked;
+                
+                // Show loading
+                loginBtn.disabled = true;
+                loginSpinner.style.display = 'block';
+                loginBtn.querySelector('span').textContent = 'Authenticating...';
+                loadingContainer.style.display = 'block';
+                
+                // Simulate loading progress
+                let progress = 0;
+                const interval = setInterval(() => {
+                    progress += 10;
+                    loadingBar.style.width = `${progress}%`;
+                    
+                    if (progress >= 100) {
+                        clearInterval(interval);
+                        
+                        // Check credentials
+                        if (userId === validId && password === validPassword) {
+                            // Successful login
+                            loginPage.style.animation = 'fadeOut 0.6s ease forwards';
+                            setTimeout(() => {
+                                loginPage.style.display = 'none';
+                                homePage.style.display = 'flex';
+                                homePage.style.animation = 'fadeIn 0.8s ease forwards';
+                                errorMessage.classList.remove('show');
+                                
+                                // Animate boxes on page load
+                                animateBoxes();
+                            }, 500);
+                            
+                            // Remember me
+                            if (rememberMe) {
+                                localStorage.setItem('rememberedUser', userId);
+                            } else {
+                                localStorage.removeItem('rememberedUser');
+                            }
+                        } else {
+                            // Failed login
+                            errorMessage.classList.add('show');
+                            loginForm.classList.add('shake');
+                            setTimeout(() => {
+                                loginForm.classList.remove('shake');
+                            }, 500);
+                        }
+                        
+                        // Reset button
+                        loginBtn.disabled = false;
+                        loginSpinner.style.display = 'none';
+                        loginBtn.querySelector('span').textContent = 'Login to Dashboard';
+                        loadingContainer.style.display = 'none';
+                        loadingBar.style.width = '0%';
+                    }
+                }, 150);
+            });
+            
+            // Navigation links
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    link.classList.add('active');
+                    
+                    // Simulate page navigation
+                    const sectionTitle = document.querySelector('.section-title h3');
+                    if(link.textContent.includes('Analytics')) {
+                        sectionTitle.textContent = "Analytics Dashboard";
+                    } else if(link.textContent.includes('Products')) {
+                        sectionTitle.textContent = "Product Management";
+                    } else if(link.textContent.includes('Team')) {
+                        sectionTitle.textContent = "Team Collaboration";
+                    } else if(link.textContent.includes('Settings')) {
+                        sectionTitle.textContent = "System Settings";
+                    } else {
+                        sectionTitle.textContent = "Featured Services";
+                    }
+                });
+            });
+            
+            // Box buttons
+            boxBtns.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    alert('Service details would be displayed here');
+                });
+            });
+            
+            // Add CSS for fadeOut animation
+            const style = document.createElement('style');
+            style.innerHTML = `
+                @keyframes fadeOut {
+                    from { opacity: 1; transform: translateY(0); }
+                    to { opacity: 0; transform: translateY(20px); }
+                }
+                .shake {
+                    animation: shake 0.5s ease;
+                }
+            `;
+            document.head.appendChild(style);
+            
+            // Box animation on scroll
+            function animateBoxes() {
+                boxes.forEach((box, index) => {
+                    // Reset animation state
+                    box.style.opacity = "0";
+                    box.classList.remove("animate");
+                    
+                    setTimeout(() => {
+                        box.classList.add("animate");
+                    }, index * 200);
+                });
+            }
+            
+            // Check remembered user
+            const rememberedUser = localStorage.getItem('rememberedUser');
+            if (rememberedUser) {
+                document.getElementById('user-id').value = rememberedUser;
+                document.getElementById('remember').checked = true;
+            }
+        });
+    </script>
+</body>
+</html>
